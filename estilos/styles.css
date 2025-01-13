@@ -1,0 +1,426 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  box-sizing: border-box;
+  background-color: rgb(183, 183, 183);
+  color:rgb(8, 22, 36) ;
+}
+
+header {
+  position: fixed;
+  top: 0; /* Asegura que se quede en la parte superior */
+  left: 0; /* Asegura que esté alineado a la izquierda */
+  width: 100%; /* Asegura que ocupe todo el ancho */
+  height: 5%;
+  background-color: white; /* Puedes poner un fondo si lo necesitas */
+  z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  padding: 12px 0; /* Ajusta el espaciado según necesites */
+}
+
+
+#liga {  /* Asegura que el <a> solo ocupe el tamaño de la imagen */
+  display: inline-block;       /* El enlace ocupará solo el tamaño de la imagen */
+  border-color: #000;
+}
+
+#logo {  /* Asegura que la imagen esté dentro de ese espacio */
+  max-height: 100%;            /* Ajusta la imagen al tamaño del enlace */
+  object-fit: contain;         /* Mantiene la proporción de la imagen */
+  width: 100%;                 /* La imagen ocupa el 100% del área del enlace */
+  transition: transform 0.3s ease; /* Transición suave para el zoom */
+  animation-duration: 6s;  /* Duración de 2 segundos por ciclo */
+  
+}
+
+#logo:hover {  /* Efecto de zoom al pasar el mouse */
+  transform: scale(1.2);        /* Aumenta el tamaño de la imagen al pasar el mouse */
+}
+
+
+
+
+.book-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden; /* Ajustado para evitar el scroll extra */
+}
+
+.page {
+  min-height: 100vh; /* Cambiado a min-height */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out, transform 0.9s ease-in-out;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.page.hidden {
+  opacity: 0;
+}
+
+.page.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.map {
+  width: 100%;
+  height: auto;
+}
+
+.page img {
+  width: 100%;
+  max-width: none;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+#boton-pdf{
+  width: 100%;
+  height: 100%;
+}
+
+#boton{
+  width: 30%;
+  height: auto;
+  background-color: rgb(110, 111, 112);
+  color:rgb(42, 0, 250);
+  border-radius: 20px;
+  box-shadow: inset 2px  rgb(97, 97, 97) ;
+}
+
+/* Aseguramos que la animación no inicie hasta que se añadan las clases */
+#map-container, #sala-container, #sala-container2{
+  opacity: 0; /* Ocultamos el contenedor al inicio */
+}
+
+
+.social-icons {
+  padding-top: 100%;  /* Empuja el contenido hacia el fondo */
+  padding-bottom: 0;
+  max-width: 100%;
+  width: 100%;
+  gap: 15px;
+}
+
+.social-icons a {
+  font-size: 24px; /* Tamaño del icono */
+  color: #000; /* Color de los iconos */
+  text-decoration: none;
+}
+
+.social-icons a:hover {
+  color: #0077b5; /* Color al pasar el ratón, ejemplo para LinkedIn */
+}
+
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 768px) {
+
+  header {
+    max-width: 100%;
+    height: 4%;
+  }
+
+  #logo-link:hover {
+    color: black;
+  }
+
+  .page {
+    padding: 20% 10px 0; 
+    display: flex; /* Usamos flexbox para centrar los elementos */
+    flex-direction: column; /* Coloca los elementos en columna */
+    align-items: center; /* Centra horizontalmente los elementos */
+    justify-content:flex-start; /* Centra verticalmente los elementos */
+    text-align: center; /* Centra el texto */
+  }
+  #map{
+    margin-top: 3%;
+  }
+/* Padding específico para el div con ID 'page2' */
+#page2 {
+  padding: 11% 5px 10px; /* Menos espacio en la segunda página */
+}
+#page2 p {
+  width: 100%;
+  padding-top: 0;
+  margin-top: -2%;
+  text-align: center;
+  font-size: .95rem;
+}
+#img2{
+  margin-top: -20px;
+  background: radial-gradient(circle, #f0f0f0);
+}
+#boton{
+  width: 30%;
+  height: auto;
+  background-color: rgb(110, 111, 112);
+  color:rgb(42, 0, 250);
+  border-radius: 20px;
+  box-shadow: inset 2px  rgb(97, 97, 97) ;
+}
+  /* Efecto al presionar el botón */
+  #boton:active {
+    transform: scale(0.95); /* Reduce el tamaño ligeramente para simular que se presiona */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interior para un efecto de presión */
+  }
+
+
+/* Padding específico para el div con ID 'page3' */
+#page3 {
+  padding-top: 11%;
+}
+
+#page3 p{
+  padding-top: 0;
+  margin-top: 0;
+}
+
+#img3 {
+  width: 90%; /* Se adapta al tamaño del contenedor */
+  height: 90%;
+  padding-top: 0;
+  margin-top: 20px;
+  border-radius: 50%; /* Hace la imagen circular */
+  object-fit: cover; /* Asegura que la imagen se ajuste correctamente */
+
+  /* Efecto de difuminado con sombra */
+  box-shadow: 0 0 20px 10px #fffcd8, 
+              0 0 30px 15px #d6d1c6,
+              0 0 40px 20px #bab9b0,
+              0 0 60px 30px rgba(183, 183, 183, 183);
+}
+
+
+
+/* Padding específico para el div con ID 'page4' */
+#page4 {
+  padding: 30% 10px; /* Menos padding en la cuarta página */
+}
+#img4 {
+  border-radius: 10px;
+  width: 100%;
+  height: auto;
+}
+/* Padding específico para el div con ID 'page5' propuesta arquitectonica*/
+#page5 {
+  height: auto;
+}
+#img5 {
+  margin-top: 5%;
+}
+
+#page5-1 {
+  background: linear-gradient(to bottom, #e0e0e0 20%, #818181 50%, #818181 50%, #e0e0e0 100%);
+}
+
+#imgd {
+  width: 100%;
+  padding: 0;
+  margin-top: -15px;
+}
+
+#page5-1 p {
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  font-size: .9rem;
+  font-weight: bold;
+  
+}
+#imgdd {
+ padding-top: 0;
+ margin-top: 5px;
+}
+/* Padding específico para el div con ID 'page6' */
+#page6 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+#img6 {
+  width: 97%;
+  height: auto;
+}
+
+#imgd1{
+  width: 95%;
+  margin-top: 1px;
+}
+
+#page6-1{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#page7 {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 13%;
+}
+#page7 p {
+  margin-top: -20%;
+}
+#img7 {
+  width: 100%;
+  margin-top: -20%;
+  padding-top: 0;
+}
+#page8 {
+  display: flex;
+  justify-content: center;
+  padding-top: 0;
+}
+  h1 {
+    font-size: 1.5em;
+    margin: 10px 0;
+  }
+
+  .map {
+    height: 300px;
+  }
+
+  .page img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+  }
+}
+
+/* Media Query para pantallas grandes */
+@media (min-width: 769px) {
+  .page {
+    padding: 20px;
+    display: flex; /* Usamos flexbox para centrar los elementos */
+    flex-direction: column; /* Coloca los elementos en columna */
+    align-items: center; /* Centra horizontalmente los elementos */
+    justify-content: flex-start; /* Alinea los elementos hacia el inicio (arriba) */
+    text-align: center; /* Centra el texto */
+  }
+
+  #page1 {
+    margin: 5% 0 0;
+  }
+  #page1 p{
+    margin-top: -10px;
+  }
+  #map {
+    margin-top: -15px;
+  }
+  #page2 {
+    padding-top: 35px;
+  }
+  #page2 p{
+    margin-top: -20px;
+  }
+  #img2 {
+    margin-top: 0;
+    padding-left: 10px;
+  }
+  #boton{
+    width: 20%;
+    height: auto;
+    background-color: rgb(110, 111, 112);
+    color:rgb(126, 183, 234);
+    border-radius: 20px;
+    box-shadow: inset 2px  rgb(0, 127, 253) ;
+  }
+  /* Efecto al presionar el botón */
+#boton:active {
+  transform: scale(0.95); /* Reduce el tamaño ligeramente para simular que se presiona */
+  box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* Sombra interior para un efecto de presión */
+}
+
+#page3 {
+  padding-top: 5%;
+}
+#page3 p{
+  margin-top: -15px;
+}
+#img3{
+  width: 100%;
+  height: 470px;
+  border-radius: 30px;
+  margin-top: -10px;
+}
+
+#page4 {
+  padding-top: 8%;
+}
+
+#img4 {
+  border-radius: 10px;
+  width: 100%;
+  height: auto;
+}
+
+#page5 {
+  padding-top: 5%;
+}
+#page5 p {
+  margin-top: -10px;
+}
+#img5 {
+  margin-top: 0;
+  width: 100%;  /* Establece un ancho fijo de 2000px para dispositivos más grandes */
+  height: auto;
+  max-width: none;
+}
+
+#page5-1 {
+  padding-top: 7%;
+}
+
+#page5-1 p {
+  padding: 0;
+  margin-top: 0;
+}
+
+/* Imagen #imgd */
+#imgd {
+  width: 63%;
+  height: auto;
+  padding: 1%;
+  margin: 0 0 0 290px; /* Centra la imagen dentro del contenedor */
+  max-width: none; /* Elimina cualquier restricción de tamaño */
+  display: block; /* Asegura que la imagen sea un bloque para alinearla correctamente */
+  object-fit: contain; /* Mantiene la proporción de la imagen */
+  border-radius: 15px;
+}
+
+/* Imagen #imgdd */
+#imgdd {
+  width: 63%;
+  height: auto;
+  padding:0;
+  margin: -10px 290px 0 0; /* Centra la imagen dentro del contenedor */
+  max-width: none; /* Elimina cualquier restricción de tamaño */
+  display: block; /* Asegura que la imagen sea un bloque para alinearla correctamente */
+  object-fit: contain; /* Mantiene la proporción de la imagen */
+}
+
+
+  h1 {
+    font-size: 2.5em;
+  }
+
+  .page img {
+    max-width: 80%;
+    margin-top: 30px;
+  }
+}
