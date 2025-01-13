@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pages = document.querySelectorAll('.page');
   let currentIndex = 0;
   let isAnimating = false; // Bloquea mientras se anima
+  let touchStartY = 0; // Para almacenar la posición inicial del toque
 
   const scrollToPage = (index) => {
     if (isAnimating || index < 0 || index >= pages.length) return;
@@ -31,21 +32,34 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleScroll = (event) => {
     if (isAnimating) return;
 
-    // Determina la dirección del scroll
-    const direction = event.deltaY > 0 ? 1 : -1;
+    let direction;
 
-    // Calcula el nuevo índice
-    const nextIndex = currentIndex + direction;
+    // Para eventos de rueda de ratón
+    if (event.deltaY !== undefined) {
+      direction = event.deltaY > 0 ? 1 : -1;
+    }
+    // Para eventos táctiles (móviles)
+    else if (event.touches) {
+      const touchEndY = event.changedTouches[0].screenY;
+      direction = touchEndY > touchStartY ? 1 : -1;
+    }
 
-    // Llama a scrollToPage con el nuevo índice
-    scrollToPage(nextIndex);
+    if (direction !== undefined) {
+      const nextIndex = currentIndex + direction;
+      scrollToPage(nextIndex);
+    }
   };
 
+  // Event listener para la rueda del ratón
   document.addEventListener('wheel', handleScroll);
+
+  // Event listeners para el toque en pantallas táctiles
+  document.addEventListener('touchstart', (event) => {
+    touchStartY = event.touches[0].screenY; // Guardar la posición del toque inicial
+  });
+
+  document.addEventListener('touchend', handleScroll); // Detectar cuando se suelta el toque
 });
-
-
-
 
 // Creamos el observer para detectar cuando los elementos entran en la vista
 const observer = new IntersectionObserver((entries, observer) => {
@@ -61,17 +75,15 @@ const observer = new IntersectionObserver((entries, observer) => {
         target.style.opacity = 1; // Hacemos visible el contenedor
       } else if (target.id === 'boton') {
         // Animación para el botón
-        target.classList.add('animate__headShake', 'animate__delay-2s' ,'animate__repeat-3');
+        target.classList.add('animate__headShake', 'animate__delay-2s', 'animate__repeat-3');
         target.style.opacity = 1; // Hacemos visible el botón
-      }
-        else if (target.id === 'sala-container') {
-      // Animación para imagenes sala
-      target.classList.add('animate__fadeInLeft', 'animate__delay-4s');
-      target.style.opacity = 1; // Hacemos visible el contenedorsala
-      }
-      else if (target.id === 'sala-container2') {
-        //animación para imagenes sala
-        target.classList.add('animate__fadeInRight','animate__delay-5s')
+      } else if (target.id === 'sala-container') {
+        // Animación para imagenes sala
+        target.classList.add('animate__fadeInLeft', 'animate__delay-4s');
+        target.style.opacity = 1; // Hacemos visible el contenedor sala
+      } else if (target.id === 'sala-container2') {
+        // Animación para imagenes sala
+        target.classList.add('animate__fadeInRight', 'animate__delay-5s');
         target.style.opacity = 1;
       }
 
@@ -86,11 +98,11 @@ const observer = new IntersectionObserver((entries, observer) => {
 // Seleccionamos los elementos a observar
 const mapContainer = document.getElementById('map-container');
 const boton = document.getElementById('boton');
-const contenedorSala = document.getElementById ('sala-container')
-const contenedorSala2 = document.getElementById ('sala-container2')
+const contenedorSala = document.getElementById('sala-container');
+const contenedorSala2 = document.getElementById('sala-container2');
 
 // Empezamos a observar los elementos
 observer.observe(mapContainer);
 observer.observe(boton);
-observer.observe(contenedorSala)
-observer.observe(contenedorSala2)
+observer.observe(contenedorSala);
+observer.observe(contenedorSala2);
