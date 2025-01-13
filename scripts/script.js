@@ -46,7 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (direction !== undefined) {
       const nextIndex = currentIndex + direction;
-      scrollToPage(nextIndex);
+
+      // Evitar que se salga de los límites (Primera y última página)
+      if (nextIndex >= 0 && nextIndex < pages.length) {
+        scrollToPage(nextIndex);
+      }
     }
   };
 
