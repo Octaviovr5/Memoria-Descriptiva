@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const pages = document.querySelectorAll('.page');
   let currentIndex = 0;
   let isAnimating = false; // Bloquea mientras se anima
+  let debounceTimeout;
 
   const scrollToPage = (index) => {
     if (isAnimating || index < 0 || index >= pages.length) return;
@@ -31,15 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleScroll = (event) => {
     if (isAnimating) return;
 
-    // Detecta la dirección del scroll
-    const direction = event.deltaY > 0 ? 1 : -1;
+    clearTimeout(debounceTimeout); // Limpiar el timeout anterior
+    debounceTimeout = setTimeout(() => {
+      const direction = event.deltaY > 0 ? 1 : -1;
+      const nextIndex = currentIndex + direction;
 
-    const nextIndex = currentIndex + direction;
-
-    // Evitar que se salga de los límites (Primera y última página)
-    if (nextIndex >= 0 && nextIndex < pages.length) {
-      scrollToPage(nextIndex);
-    }
+      if (nextIndex >= 0 && nextIndex < pages.length) {
+        scrollToPage(nextIndex);
+      }
+    }, 150); // Retraso de 150ms para evitar múltiples ejecuciones rápidas
   };
 
   // Event listener para la rueda del ratón (desplazamiento con el ratón)
@@ -87,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // Creamos el observer para detectar cuando los elementos entran en la vista
 const observer = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
-    // Si el elemento es visible
     if (entry.isIntersecting) {
       const target = entry.target;
 
@@ -115,7 +115,8 @@ const observer = new IntersectionObserver((entries, observer) => {
     }
   });
 }, {
-  threshold: 0.5 // El 50% del elemento debe ser visible para activar la animación
+  threshold: 0.5, // El 50% del elemento debe ser visible para activar la animación
+  rootMargin: '0px 0px -50px 0px' // Anticipamos la animación antes de que el elemento sea 50% visible
 });
 
 // Seleccionamos los elementos a observar
