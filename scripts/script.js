@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Para eventos táctiles (móviles)
     else if (event.touches) {
       const touchEndY = event.changedTouches[0].screenY;
-      direction = touchEndY > touchStartY ? 1 : -1;
+      direction = touchEndY < touchStartY ? 1 : -1;  // Cambié la comparación para invertir la dirección
     }
 
     if (direction !== undefined) {
