@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const pages = document.querySelectorAll('.page');
   let currentIndex = 0;
   let isAnimating = false; // Bloquea mientras se anima
-  let touchStartY = 0; // Para almacenar la posición inicial del toque
 
   const scrollToPage = (index) => {
     if (isAnimating || index < 0 || index >= pages.length) return;
@@ -32,37 +31,57 @@ document.addEventListener('DOMContentLoaded', () => {
   const handleScroll = (event) => {
     if (isAnimating) return;
 
-    let direction;
+    // Detecta la dirección del scroll
+    const direction = event.deltaY > 0 ? 1 : -1;
 
-    // Para eventos de rueda de ratón
-    if (event.deltaY !== undefined) {
-      direction = event.deltaY > 0 ? 1 : -1;
-    }
-    // Para eventos táctiles (móviles)
-    else if (event.touches) {
-      const touchEndY = event.changedTouches[0].screenY;
-      direction = touchEndY < touchStartY ? 1 : -1;  // Cambié la comparación para invertir la dirección
-    }
+    const nextIndex = currentIndex + direction;
 
-    if (direction !== undefined) {
-      const nextIndex = currentIndex + direction;
-
-      // Evitar que se salga de los límites (Primera y última página)
-      if (nextIndex >= 0 && nextIndex < pages.length) {
-        scrollToPage(nextIndex);
-      }
+    // Evitar que se salga de los límites (Primera y última página)
+    if (nextIndex >= 0 && nextIndex < pages.length) {
+      scrollToPage(nextIndex);
     }
   };
 
-  // Event listener para la rueda del ratón
+  // Event listener para la rueda del ratón (desplazamiento con el ratón)
   document.addEventListener('wheel', handleScroll);
 
-  // Event listeners para el toque en pantallas táctiles
-  document.addEventListener('touchstart', (event) => {
-    touchStartY = event.touches[0].screenY; // Guardar la posición del toque inicial
-  });
+  // Variables para controlar el deslizamiento táctil
+  let touchStartY = 0;
+  let touchEndY = 0;
+  let isTouching = false;
 
-  document.addEventListener('touchend', handleScroll); // Detectar cuando se suelta el toque
+  const handleTouchStart = (event) => {
+    // Registrar el punto de inicio del toque
+    touchStartY = event.touches[0].clientY;
+    isTouching = true;
+  };
+
+  const handleTouchMove = (event) => {
+    // Registrar el punto de finalización del toque
+    touchEndY = event.touches[0].clientY;
+  };
+
+  const handleTouchEnd = () => {
+    if (!isTouching) return;
+
+    const direction = touchEndY - touchStartY;
+
+    if (direction > 50) {
+      // Si el usuario desliza hacia abajo
+      scrollToPage(currentIndex - 1);
+    } else if (direction < -50) {
+      // Si el usuario desliza hacia arriba
+      scrollToPage(currentIndex + 1);
+    }
+
+    // Restablecer el estado de la interacción táctil
+    isTouching = false;
+  };
+
+  // Agregar eventos para manejo táctil
+  document.addEventListener('touchstart', handleTouchStart);
+  document.addEventListener('touchmove', handleTouchMove);
+  document.addEventListener('touchend', handleTouchEnd);
 });
 
 // Creamos el observer para detectar cuando los elementos entran en la vista
@@ -82,11 +101,11 @@ const observer = new IntersectionObserver((entries, observer) => {
         target.classList.add('animate__headShake', 'animate__delay-2s', 'animate__repeat-3');
         target.style.opacity = 1; // Hacemos visible el botón
       } else if (target.id === 'sala-container') {
-        // Animación para imagenes sala
+        // Animación para imágenes de sala
         target.classList.add('animate__fadeInLeft', 'animate__delay-4s');
         target.style.opacity = 1; // Hacemos visible el contenedor sala
       } else if (target.id === 'sala-container2') {
-        // Animación para imagenes sala
+        // Animación para imágenes de sala
         target.classList.add('animate__fadeInRight', 'animate__delay-5s');
         target.style.opacity = 1;
       }
