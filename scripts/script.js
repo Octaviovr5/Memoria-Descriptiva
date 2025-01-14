@@ -88,34 +88,38 @@ document.addEventListener('DOMContentLoaded', () => {
 // Creamos el observer para detectar cuando los elementos entran en la vista
 const observer = new IntersectionObserver((entries, observer) => {
   entries.forEach(entry => {
+    const target = entry.target;
+
     if (entry.isIntersecting) {
-      const target = entry.target;
+      // Elemento ha entrado en la vista
 
       // Verificamos qué elemento está siendo observado y aplicamos animaciones específicas
       if (target.id === 'map-container') {
-        // Animación para el contenedor del mapa
+        // Limpiar animaciones previas y agregar nueva animación
+        target.classList.remove('animate__zoomIn', 'animate__fadeInLeft', 'animate__headShake');
         target.classList.add('animate__zoomIn', 'animate__delay-1s');
-        target.style.opacity = 1; // Hacemos visible el contenedor
+        target.style.opacity = 1;
       } else if (target.id === 'boton') {
-        // Animación para el botón
+        target.classList.remove('animate__headShake', 'animate__fadeInLeft', 'animate__zoomIn');
         target.classList.add('animate__headShake', 'animate__delay-2s', 'animate__repeat-3');
-        target.style.opacity = 1; // Hacemos visible el botón
+        target.style.opacity = 1;
       } else if (target.id === 'sala-container') {
-        // Animación para imágenes de sala
-        target.classList.add('animate__fadeInLeft', 'animate__delay-4s');
-        target.style.opacity = 1; // Hacemos visible el contenedor sala
+        target.classList.remove('animate__fadeInLeft', 'animate__zoomIn', 'animate__headShake');
+        target.classList.add('animate__bounceInLeft', 'animate__delay-3s');
+        target.style.opacity = 1;
       } else if (target.id === 'sala-container2') {
-        // Animación para imágenes de sala
-        target.classList.add('animate__fadeInRight', 'animate__delay-5s');
+        target.classList.remove('animate__fadeInRight', 'animate__zoomIn', 'animate__headShake');
+        target.classList.add('animate__bounceInRight', 'animate__delay-4s');
         target.style.opacity = 1;
       }
-
-      // Dejamos de observar el elemento una vez que se ha animado
-      observer.unobserve(target);
+    } else {
+      // Elemento ha salido de la vista, eliminamos las animaciones
+      target.classList.remove('animate__zoomIn', 'animate__fadeInLeft', 'animate__headShake', 'animate__fadeInRight');
+      target.style.opacity = 0;
     }
   });
 }, {
-  threshold: 0.5, // El 50% del elemento debe ser visible para activar la animación
+  threshold: 0.8, // El 50% del elemento debe ser visible para activar la animación
   rootMargin: '0px 0px -50px 0px' // Anticipamos la animación antes de que el elemento sea 50% visible
 });
 
@@ -130,3 +134,12 @@ observer.observe(mapContainer);
 observer.observe(boton);
 observer.observe(contenedorSala);
 observer.observe(contenedorSala2);
+
+// Aseguramos una transición suave de opacidad en CSS
+const style = document.createElement('style');
+style.innerHTML = `
+  .animate__fadeInLeft, .animate__zoomIn, .animate__headShake, .animate__bounceInLeft, .animate__bounceInRight {
+    transition: opacity 0.5s ease-in-out;
+  }
+`;
+document.head.appendChild(style);
